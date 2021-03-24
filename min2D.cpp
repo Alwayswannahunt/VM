@@ -1,31 +1,7 @@
 
 #include <iostream>
 #include <math.h>
-
-template<typename A, typename B> struct vect{
-   A x;
-   B y;
-};
-
-template<typename A, typename B> vect<A, B> operator * (double a, vect<A, B> r) {
-    return { a * r.x, a * r.y };
-}
-
-template<typename A, typename B> vect<A, B> operator * (vect<A, B> r, double a) {
-    return{ a * r.x, a * r.y };
-}
-
-template<typename A, typename B> vect<A, B> operator + (vect<A, B> r_1, vect<A, B> r_2) {
-    return{ r_1.x + r_2.x, r_1.y + r_2.y };
-}
-
-template<typename A, typename B> vect<A, B> operator - (vect<A, B> r_1, vect<A, B> r_2) {
-    return{ r_1.x - r_2.x, r_1.y - r_2.y };
-}
-
-double modulVect(vect<double, double> r) {
-    return (sqrt(r.x * r.x - r.y * r.y));
-}
+#include "vect.h"
 
 double sgn(double lol) {
     return(2 * (double)(lol > 0) - 1); // опять та самая апроксимация (ну а что! По двум точкам прямую)   Недавно нашёл функцию signbit, надо было через неё.

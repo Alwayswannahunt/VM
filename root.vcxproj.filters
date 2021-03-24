@@ -27,12 +27,18 @@
     <ClCompile Include="approximationOfRoot.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="vect.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="root.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="min2D.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="vect.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

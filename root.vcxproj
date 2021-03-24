@@ -144,10 +144,12 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="min2D.cpp" />
     <ClCompile Include="root.cpp" />
+    <ClCompile Include="vect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="min2D.h" />
     <ClInclude Include="root.h" />
+    <ClInclude Include="vect.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
