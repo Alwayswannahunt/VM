@@ -1,7 +1,7 @@
-
+#include "vect.h"
 #include <iostream>
 #include <math.h>
-#include "vect.h"
+
 
 double sgn(double lol) {
     return(2 * (double)(lol > 0) - 1); // опять та самая апроксимация (ну а что! По двум точкам прямую)   Недавно нашёл функцию signbit, надо было через неё.

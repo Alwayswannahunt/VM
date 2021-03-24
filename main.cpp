@@ -1,5 +1,6 @@
-#include "min2D.h"
+#include "vect.h"
 #include "root.h"
+#include "min2D.h"
 #include <iostream>
 
 int main() {
