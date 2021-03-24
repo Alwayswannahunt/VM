@@ -4,6 +4,6 @@
 
 Первое задание - root.cpp
 
-второе задание - min2D.cpp
+Второе задание - min2D.cpp
 
-третье задание - approximationOfRoot.cpp 
+Третье задание - approximationOfRoot.cpp 
