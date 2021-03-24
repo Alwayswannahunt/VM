@@ -4,7 +4,7 @@
 
 int main() {
 	std::cout << "Hello User! I search root for a/x - exp(x).\n" << "Type a: ";
-	std::cout << "I found "<< root() << '\n';
+	std::cout << "I found "<< root(1) << '\n';
 	std::cout.precision(6);
 	std::cout << "Hello User! I search minimum of (xy - ctg(x))^2 + sin^2(xy).\n";
 	vect<double, double> r1 = min2D({ 1,1 });

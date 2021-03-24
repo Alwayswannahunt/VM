@@ -1,2 +1,2 @@
 
-double root();
+double root(double);

@@ -31,13 +31,11 @@ double parabolaRoot(double(*func) (double, double), double prev_x, double a) {
 
 
 
-double root()     // root of a/x = exp(x)
+double root(double a /* параметр нашего уравнения*/   )     // root of a/x = exp(x)
 {
     double prev_x; // точка для поиска корня
-    double a; // параметр нашего уравнения
     double (*p_f)(double, double) = f; // указатель на функцию
     std::cout.precision(6); // вывод 6-ти знаков после запятой
-    std::cin >> a;
     prev_x = a / 2;   // попадает ровно в корень пачему-тааа
 
     double x = prev_x; // новая точка поиска
