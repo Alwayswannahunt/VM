@@ -61,13 +61,13 @@ vect<double, double> min2D(vect<double, double> r0) {
 
         double prev_lambda = 0;
         double lambda = 0;
-        vect<double, double> grad = gradFunc(f,prev_r);
+        vect<double, double> grad = gradFunc(f,prev_r)/ modulVect(gradFunc(f, prev_r));
         do
         {
             prev_lambda = lambda;
             lambda = parabolaMin(f1D, prev_r, prev_lambda, grad);
         } while (f1D(prev_r,prev_lambda, grad) > f1D(prev_r, lambda, grad));
-        r_2 = prev_r + lambda * grad;
+        r_2 = prev_r + prev_lambda * grad;
         // обожаю алгоритмы такие, кстати, интересно сколько я буду это фиксить и искать баги?))) (багов не было, если вам интересно)
         prev_r = 4*h * prev_r;
 
@@ -76,15 +76,15 @@ vect<double, double> min2D(vect<double, double> r0) {
         r_1 = r_2;
         prev_lambda = 0;
         lambda = 0;
-        grad = gradFunc(f, prev_r);
+        grad = gradFunc(f, prev_r) / modulVect(gradFunc(f, prev_r));
         do
         {
             prev_lambda = lambda;
             lambda = parabolaMin(f1D, prev_r, prev_lambda, grad);
         } while (f1D(prev_r, prev_lambda, grad) > f1D(prev_r, lambda, grad));
-        r_2 = prev_r + lambda * grad;
+        r_2 = prev_r + prev_lambda * grad;
         prev_r = r_2 + h * (r_2 - r_1) * sgn(f(r_1) - f(r_2));
-    } while (f(r_1) > f(r_2)  || (modulVect(r_2-r_1) > 0.0001));
+    } while (f(r_1) > f(r_2));
 
     return(r_1);
 }

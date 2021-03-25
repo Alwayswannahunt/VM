@@ -14,7 +14,7 @@ struct vect3D {
 };
 
 double modulVect(vect<double, double> r) {
-    return (sqrt(r.x * r.x - r.y * r.y));
+    return (sqrt(r.x * r.x + r.y * r.y));
 }
 
 double modulVect3D(vect3D<double,double,double> r) {
