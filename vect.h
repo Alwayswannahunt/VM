@@ -57,3 +57,7 @@ template<typename A, typename B, typename C>
 vect3D<A, B, C> operator * (double a, vect3D<A, B, C> r) {
     return { r.a0 * a,r.a1 * a,r.b1 * a };
 };
+
+double modulVect3D(vect3D<double, double,double>);
+
+double sgn(double);

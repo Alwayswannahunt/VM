@@ -3,9 +3,6 @@
 #include <math.h>
 
 
-double sgn(double lol) {
-    return(2 * (double)(lol > 0) - 1); // опять та самая апроксимация (ну а что! По двум точкам прямую)   Недавно нашёл функцию signbit, надо было через неё.
-}
 
 double f(vect<double, double> r) {   // функция минимум которой ищем
     double x = r.x;

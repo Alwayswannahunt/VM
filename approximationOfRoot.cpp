@@ -1,9 +1,7 @@
 #include <math.h>
 #include "vect.h"
 
-double sgn(double num) {
-	return (-2 * signbit(num) + 1);
-}
+
 
 
 double differenceOfAproximation(	// сама наша функция
@@ -37,10 +35,9 @@ double differenceOfAproximation1D( // одномерное выражение для нашей функции
 
 vect3D<double, double, double> gradFunc(
 	double (*p_func)(vect<double, double>*, int, vect3D<double, double, double>, vect3D<double, double, double>),
-	vect3D<double, double, double> grad_point,
 	vect<double, double>* real_point,  // точки по которым аппроксимируем (первая координата - параметр, вторая - значения корня при этом параметре)
 	int length,	// длина массива real_point
-	vect3D<double, double, double> parametrs,
+	vect3D<double, double, double> parametrs, // точка в которой ищется градиент
 	vect3D<double, double, double> prev_parametrs
 )
 {
@@ -78,8 +75,9 @@ double secondDerivative1D(
 }
 
 double parabolaMin(
-	double (*p_func_frst_derv)(vect<double, double>*, int, vect3D<double, double, double>, vect3D<double, double, double>, vect3D<double, double, double>, double),
-	double (*p_func_secnd_derv)(vect<double, double>*, int, vect3D<double, double, double>, vect3D<double, double, double>, vect3D<double, double, double>, double),
+	double (*p_func_frst_derv)(double (*p_func)(vect<double, double>*, int, vect3D<double, double, double>, vect3D<double, double, double>, vect3D<double, double, double>, double), vect<double, double>*, int, vect3D<double, double, double>, vect3D<double, double, double>, vect3D<double, double, double>, double),
+	double (*p_func_secnd_derv)(double (*p_func)(vect<double, double>*, int, vect3D<double, double, double>, vect3D<double, double, double>, vect3D<double, double, double>, double), vect<double, double>*, int, vect3D<double, double, double>, vect3D<double, double, double>, vect3D<double, double, double>, double),
+	double (*p_func)(vect<double, double>*, int, vect3D<double, double, double>, vect3D<double, double, double>, vect3D<double, double, double>, double),
 	vect<double, double>* real_point,  // точки по которым аппроксимируем (первая координата - параметр, вторая - значения корня при этом параметре)
 	int length,	// длина массива real_point
 	vect3D<double, double, double> parametrs,
@@ -88,11 +86,59 @@ double parabolaMin(
 	double lambda,
 	double prev_lambda)
 {
-	double scnd_derv  =  p_func_secnd_derv(real_point, length, parametrs, prev_parametrs, grad, lambda);
+	double scnd_derv  =  p_func_secnd_derv(p_func,real_point, length, parametrs, prev_parametrs, grad, lambda);
 
-	return(prev_lambda - p_func_frst_derv(real_point,length,parametrs,prev_parametrs,grad,lambda) / (scnd_derv*signbit(scnd_derv)) );
+	return(prev_lambda - p_func_frst_derv(p_func ,real_point,length,parametrs,prev_parametrs,grad,lambda) / (scnd_derv*sgn(scnd_derv)) );
 }
 
 vect3D<double, double, double> approximationOfRoot(vect<double, double>* real_point, int length) {
+	double (*p_diff_aprox)(vect<double, double>*, int, vect3D<double,double,double>, vect3D<double, double, double>) = differenceOfAproximation; // указатель на функцию разности апроксимации и реальных точек
+	double (*p_diff_aprox_1D)(vect<double, double>*, int, vect3D<double, double, double>, vect3D<double, double, double>, vect3D<double, double, double>,double) = differenceOfAproximation1D; // указатель на функции разности апроксимации и реальных точек через градиент и лямбда
+	double (*p_frst_derv_1D)(double (*p_func)(vect<double, double>*, int, vect3D<double, double, double>, vect3D<double, double, double>, vect3D<double, double, double>, double),vect<double, double>*, int, vect3D<double, double, double>, vect3D<double, double, double>, vect3D<double, double, double>, double) = derivative1D;
+	double (*p_scnd_derv_1D)(double (*p_func)(vect<double, double>*, int, vect3D<double, double, double>, vect3D<double, double, double>, vect3D<double, double, double>, double),vect<double, double>*, int, vect3D<double, double, double>, vect3D<double, double, double>, vect3D<double, double, double>, double) = secondDerivative1D;
+	double const h = 0.14;  // а есть логика выбора h?
+	vect3D<double, double, double> prev_r = {0,0,0};
+	vect3D<double, double, double> prev_r_1 = { 0,0,0 };
+	vect3D<double, double, double> prev_r_2 = { 0,0,0 };
+	vect3D<double, double,double> r_1 = { 0,0,0 };
+	vect3D<double, double,double> r_2 = { 0,0,0 };
+	// код прямо копирка из второго задания с учётом многомерности, логику не менял!
+	double prev_lambda = 0;
+	double lambda = 0;
+	vect3D<double, double,double> grad = gradFunc(p_diff_aprox,real_point,length,prev_r,prev_r);
+	do
+	{
+		prev_lambda = lambda;
+		lambda = parabolaMin(p_frst_derv_1D,p_scnd_derv_1D, p_diff_aprox_1D,real_point,length,r_1, prev_r,grad, lambda, prev_lambda);
+	} while (p_diff_aprox_1D(real_point,length,prev_r, prev_r, grad, prev_lambda) > p_diff_aprox_1D(real_point, length, prev_r,prev_r, grad, lambda));
+	prev_r_2 = r_2;
+	r_2 = prev_r + lambda * grad;
+	prev_r = 3 * h * prev_r;
+
+	do
+	{
+		prev_r_1 = prev_r_2;
+		r_1 = r_2;
+		prev_lambda = 0;
+		lambda = 0;
+		grad = gradFunc(p_diff_aprox, real_point, length, prev_r, prev_r);
+		do
+		{
+			prev_lambda = lambda;
+			lambda = parabolaMin(p_frst_derv_1D, p_scnd_derv_1D, p_diff_aprox_1D, real_point, length, r_1, prev_r, grad, lambda, prev_lambda);
+		} while (p_diff_aprox_1D(real_point, length, prev_r, prev_r, grad, prev_lambda) > p_diff_aprox_1D(real_point, length, prev_r, prev_r, grad, lambda));
+		prev_r_2 = r_2;
+		r_2 = prev_r + lambda * grad;
+		prev_r = r_2 + h * (r_2 - r_1) * sgn(p_diff_aprox(real_point,length,r_1,prev_r_1) - p_diff_aprox(real_point, length, r_2, prev_r_2));
+	} while (p_diff_aprox(real_point, length, r_1, prev_r_1) - p_diff_aprox(real_point, length, r_2, prev_r_2) || (modulVect3D(r_2 - r_1) > 0.0001));
+	// кстати ctrl+c & ctrl+v из второй задачки, я тут подумал что модуль второй производной для минимума пораболы используется же только в одномере, так что нормальный вариант!
+	/*
+
+
+
+
+    return(r_1);
+	*/
+
 	return{ 1,1,1 };
 }

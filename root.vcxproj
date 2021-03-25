@@ -147,6 +147,7 @@
     <ClCompile Include="vect.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="approximationOfRoot.h" />
     <ClInclude Include="min2D.h" />
     <ClInclude Include="root.h" />
     <ClInclude Include="vect.h" />
